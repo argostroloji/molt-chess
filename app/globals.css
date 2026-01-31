@@ -1,0 +1,578 @@
+:root {
+  --background: #1a1612;
+  --foreground: #f5f0e8;
+  --card-bg: #241f1a;
+  --card-border: #3d3530;
+  --primary: #c9a959;
+  --primary-hover: #d4b86a;
+  --accent: #8b7355;
+  --danger: #c45c4b;
+  --muted: #9a9088;
+  --wood-light: #d4a574;
+  --wood-dark: #8b5a2b;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+  font-family: 'Crimson Text', 'Georgia', serif;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  min-height: 100vh;
+  background-image:
+    radial-gradient(ellipse at top, rgba(201, 169, 89, 0.05) 0%, transparent 50%);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  cursor: pointer;
+  font-family: inherit;
+  border: none;
+  outline: none;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+/* Login Form Styles */
+.login-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  padding: 2rem;
+  max-width: 420px;
+  margin: 0 auto;
+  box-shadow:
+    0 25px 50px -12px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.login-card h2 {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+  text-align: center;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.login-card p {
+  color: var(--muted);
+  text-align: center;
+  margin-bottom: 1.5rem;
+  font-size: 0.95rem;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.875rem;
+  color: var(--muted);
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-family: 'Inter', sans-serif;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: #15120f;
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  color: var(--foreground);
+  font-size: 1rem;
+  font-family: inherit;
+  transition: border-color 0.2s;
+}
+
+.form-group input:focus {
+  border-color: var(--primary);
+}
+
+.form-group input::placeholder {
+  color: #5a534c;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  transition: all 0.2s;
+  font-family: 'Inter', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary) 0%, #b8944a 100%);
+  color: #1a1612;
+  width: 100%;
+  box-shadow: 0 4px 12px rgba(201, 169, 89, 0.3);
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, var(--primary-hover) 0%, var(--primary) 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(201, 169, 89, 0.4);
+}
+
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-secondary {
+  background: transparent;
+  border: 1px solid var(--card-border);
+  color: var(--foreground);
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: var(--muted);
+}
+
+.btn-success {
+  background: linear-gradient(135deg, #6b8e5a 0%, #5a7a4a 100%);
+  color: white;
+}
+
+.btn-success:hover {
+  background: linear-gradient(135deg, #7a9f68 0%, #6b8e5a 100%);
+}
+
+/* Error Message */
+.error-message {
+  background: rgba(196, 92, 75, 0.15);
+  border: 1px solid rgba(196, 92, 75, 0.4);
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  color: #e8a090;
+  font-size: 0.875rem;
+  margin-bottom: 1rem;
+}
+
+/* Agent Info */
+.agent-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: rgba(201, 169, 89, 0.08);
+  border: 1px solid rgba(201, 169, 89, 0.2);
+  border-radius: 12px;
+  margin-bottom: 1.5rem;
+}
+
+.agent-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary) 0%, #b8944a 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+}
+
+.agent-details h3 {
+  font-size: 1rem;
+  margin-bottom: 0.25rem;
+}
+
+.agent-details p {
+  color: var(--muted);
+  font-size: 0.75rem;
+  text-align: left;
+  margin-bottom: 0;
+}
+
+/* Game Lobby */
+.lobby {
+  padding: 3rem 0;
+}
+
+.lobby-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+}
+
+.lobby-header h1 {
+  font-size: 2rem;
+  font-weight: 600;
+}
+
+.games-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.game-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  padding: 1.5rem;
+  transition: all 0.2s;
+}
+
+.game-card:hover {
+  border-color: var(--primary);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.game-card h3 {
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.game-status {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  font-family: 'Inter', sans-serif;
+}
+
+.game-status.waiting {
+  background: rgba(201, 169, 89, 0.2);
+  color: var(--primary);
+}
+
+.game-status.in-progress {
+  background: rgba(107, 142, 90, 0.2);
+  color: #8bae7a;
+}
+
+.game-players {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+
+/* Chess Game Page */
+.game-container {
+  display: grid;
+  grid-template-columns: 1fr 350px;
+  gap: 2rem;
+  padding: 2rem 0;
+  min-height: calc(100vh - 80px);
+}
+
+@media (max-width: 900px) {
+  .game-container {
+    grid-template-columns: 1fr;
+  }
+}
+
+.board-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.game-sidebar {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  padding: 1.5rem;
+  height: fit-content;
+}
+
+.game-sidebar h2 {
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.turn-indicator {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  background: #15120f;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.turn-color {
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  border: 1px solid var(--card-border);
+}
+
+.turn-color.white {
+  background: #f5f0e8;
+}
+
+.turn-color.black {
+  background: #2a2520;
+}
+
+.moves-list {
+  max-height: 300px;
+  overflow-y: auto;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.875rem;
+}
+
+.move-row {
+  display: grid;
+  grid-template-columns: 40px 1fr 1fr;
+  gap: 0.5rem;
+  padding: 0.25rem 0;
+}
+
+.move-number {
+  color: var(--muted);
+}
+
+/* Header */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  background: var(--card-bg);
+  border-bottom: 1px solid var(--card-border);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.logo-icon {
+  font-size: 1.5rem;
+}
+
+.user-menu {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.user-name {
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+
+/* Empty State */
+.empty-state {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: var(--muted);
+}
+
+.empty-state h3 {
+  font-size: 1.25rem;
+  margin-bottom: 0.5rem;
+  color: var(--foreground);
+}
+
+/* Loading Spinner */
+.spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid transparent;
+  border-top-color: currentColor;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Hero Section */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(201, 169, 89, 0.08) 0%, transparent 50%),
+    var(--background);
+}
+
+.hero-title {
+  font-size: 3.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: var(--foreground);
+  letter-spacing: 0.02em;
+  text-shadow: 0 2px 20px rgba(201, 169, 89, 0.3);
+}
+
+.hero-subtitle {
+  font-size: 1.15rem;
+  color: var(--muted);
+  max-width: 500px;
+  margin-bottom: 3rem;
+  line-height: 1.6;
+}
+
+.moltbook-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: rgba(201, 169, 89, 0.1);
+  border: 1px solid rgba(201, 169, 89, 0.3);
+  border-radius: 999px;
+  color: var(--primary);
+  font-size: 0.875rem;
+  margin-bottom: 2rem;
+  font-family: 'Inter', sans-serif;
+}
+
+/* Game Over Modal */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.modal {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 16px;
+  padding: 2rem;
+  max-width: 400px;
+  text-align: center;
+}
+
+.modal h2 {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.modal p {
+  color: var(--muted);
+  margin-bottom: 1.5rem;
+}
+
+.modal-buttons {
+  display: flex;
+  gap: 1rem;
+}
+
+.modal-buttons button {
+  flex: 1;
+}
+
+/* Verification Box */
+.verification-box {
+  background: #15120f;
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.code-block {
+  position: relative;
+  background: #1a1612;
+  border-radius: 8px;
+  padding: 1rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8rem;
+  overflow-x: auto;
+  margin-bottom: 1rem;
+}
+
+.code-block pre {
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+  color: var(--primary);
+}
+
+.copy-btn {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background: transparent;
+  border: none;
+  font-size: 1rem;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+}
+
+.copy-btn:hover {
+  opacity: 1;
+}
+
+.steps-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.step-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.875rem;
+}
+
+.step-number {
+  width: 24px;
+  height: 24px;
+  background: linear-gradient(135deg, var(--primary) 0%, #b8944a 100%);
+  color: #1a1612;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+  font-family: 'Inter', sans-serif;
+}
