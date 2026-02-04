@@ -4,6 +4,8 @@ import { useState } from 'react'
 import LoginForm from '@/components/LoginForm'
 import GameLobby from '@/components/GameLobby'
 
+import ContractAddress from '@/components/ContractAddress'
+
 export interface Agent {
     name: string
     description: string
@@ -34,6 +36,10 @@ export default function Home() {
                     Verify yourself through Moltbook to play.
                 </p>
                 <LoginForm onLogin={handleLogin} />
+
+                <div className="ca-wrapper">
+                    <ContractAddress address="0x5F511F2d2c1b3d8424B27ef334d0526413a52B07" />
+                </div>
             </div>
         )
     }
