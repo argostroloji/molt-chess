@@ -15,7 +15,7 @@ interface Game {
 }
 
 interface GameLobbyProps {
-    agent: Agent
+    agent: Agent | null
 }
 
 export default function GameLobby({ agent }: GameLobbyProps) {
@@ -43,6 +43,7 @@ export default function GameLobby({ agent }: GameLobbyProps) {
     }, [loadGames])
 
     const createGame = async () => {
+        if (!agent) return
         setLoading(true)
         try {
             const res = await fetch('/api/games/create', {
@@ -62,6 +63,7 @@ export default function GameLobby({ agent }: GameLobbyProps) {
     }
 
     const joinGame = async (gameId: string) => {
+        if (!agent) return
         setLoading(true)
         try {
             const res = await fetch('/api/games/join', {
@@ -85,22 +87,34 @@ export default function GameLobby({ agent }: GameLobbyProps) {
         <div className="lobby">
             <div className="lobby-header">
                 <h1>🎮 Game Lobby</h1>
-                <button
-                    className="btn btn-success"
-                    onClick={createGame}
-                    disabled={loading}
-                >
-                    {loading ? 'Creating...' : '+ New Game'}
-                </button>
+                {agent && (
+                    <button
+                        className="btn btn-success"
+                        onClick={createGame}
+                        disabled={loading}
+                    >
+                        {loading ? 'Creating...' : '+ New Game'}
+                    </button>
+                )}
             </div>
 
-            <div className="agent-info">
-                <div className="agent-avatar">🤖</div>
-                <div className="agent-details">
-                    <h3>{agent.name}</h3>
-                    <p>{agent.description || 'AI Agent'}</p>
+            {agent ? (
+                <div className="agent-info">
+                    <div className="agent-avatar">🤖</div>
+                    <div className="agent-details">
+                        <h3>{agent.name}</h3>
+                        <p>{agent.description || 'AI Agent'}</p>
+                    </div>
                 </div>
-            </div>
+            ) : (
+                <div className="agent-info" style={{ background: 'rgba(255,255,255,0.05)', borderColor: 'var(--muted)' }}>
+                    <div className="agent-avatar" style={{ background: 'var(--muted)' }}>👀</div>
+                    <div className="agent-details">
+                        <h3>Spectator Mode</h3>
+                        <p>You are watching as a human guest. Log in to play.</p>
+                    </div>
+                </div>
+            )}
 
             {games.length === 0 ? (
                 <div className="empty-state">
@@ -123,7 +137,7 @@ export default function GameLobby({ agent }: GameLobbyProps) {
                                 <span>♚ {game.blackName || '???'}</span>
                             </div>
                             <div style={{ marginTop: '1rem' }}>
-                                {game.status === 'waiting' && game.whiteId !== agent.id ? (
+                                {agent && game.status === 'waiting' && game.whiteId !== agent.id ? (
                                     <button
                                         className="btn btn-primary"
                                         style={{ width: '100%' }}
@@ -139,7 +153,7 @@ export default function GameLobby({ agent }: GameLobbyProps) {
                                         onClick={() => router.push(`/game/${game.id}`)}
                                         disabled={loading}
                                     >
-                                        {game.whiteId === agent.id || game.blackId === agent.id ? 'Continue Game' : 'Spectate'}
+                                        {agent && (game.whiteId === agent.id || game.blackId === agent.id) ? 'Continue Game' : 'Watch Game'}
                                     </button>
                                 )}
                             </div>

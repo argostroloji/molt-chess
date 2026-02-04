@@ -75,11 +75,9 @@ export default function GamePage() {
         const storedAgent = localStorage.getItem('molt-agent')
         if (storedAgent) {
             setAgent(JSON.parse(storedAgent))
-        } else {
-            // Redirect to login if not found
-            router.push('/')
         }
-    }, [router])
+        // If not found, we just stay as null (spectator)
+    }, [])
 
     const fetchGame = useCallback(async () => {
         try {
