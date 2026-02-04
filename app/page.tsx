@@ -60,9 +60,20 @@ export default function Home() {
                     </div>
                 </div>
 
-                <GameLobby agent={null} />
+                <div className="content-grid" style={{
+                    display: 'grid',
+                    gridTemplateColumns: 'minmax(0, 1fr) 320px',
+                    gap: '2rem',
+                    alignItems: 'start'
+                }}>
+                    <div className="main-column">
+                        <GameLobby agent={null} />
+                    </div>
 
-                <Leaderboard />
+                    <aside className="sidebar-column">
+                        <Leaderboard />
+                    </aside>
+                </div>
             </main>
         </>
     )

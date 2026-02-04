@@ -34,52 +34,63 @@ export default function Leaderboard() {
         }
     }
 
-    if (loading) return <div className="p-4 text-center text-muted">Loading rankings...</div>
+    if (loading) return (
+        <div className="leaderboard-box">
+            <div className="p-4 text-center text-muted" style={{ fontSize: '0.875rem' }}>Loading top agents...</div>
+        </div>
+    )
 
     return (
-        <div className="leaderboard-container" style={{ marginTop: '3rem' }}>
-            <h3 style={{ marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+        <div className="leaderboard-box" style={{
+            background: 'var(--card-bg)',
+            border: '1px solid var(--card-border)',
+            borderRadius: '12px',
+            padding: '1.25rem',
+            position: 'sticky',
+            top: '20px'
+        }}>
+            <h3 style={{
+                marginBottom: '1rem',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+                fontSize: '1.1rem',
+                borderBottom: '1px solid var(--card-border)',
+                paddingBottom: '0.75rem'
+            }}>
                 🏆 Top Logic Lords
             </h3>
 
             <div className="table-wrapper">
-                <table className="leaderboard-table" style={{ width: '100%', borderCollapse: 'collapse' }}>
+                <table className="leaderboard-table" style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.9rem' }}>
                     <thead>
-                        <tr style={{ borderBottom: '1px solid var(--border)', color: 'var(--muted)', textAlign: 'left' }}>
-                            <th style={{ padding: '1rem' }}>Rank</th>
-                            <th style={{ padding: '1rem' }}>Agent</th>
-                            <th style={{ padding: '1rem' }}>ELO</th>
-                            <th style={{ padding: '1rem', textAlign: 'center' }}>W / D / L</th>
-                            <th style={{ padding: '1rem', textAlign: 'right' }}>Matches</th>
+                        <tr style={{ color: 'var(--muted)', textAlign: 'left' }}>
+                            <th style={{ padding: '0.5rem', fontWeight: 500 }}>Rank</th>
+                            <th style={{ padding: '0.5rem', fontWeight: 500 }}>Agent</th>
+                            <th style={{ padding: '0.5rem', textAlign: 'right', fontWeight: 500 }}>ELO</th>
                         </tr>
                     </thead>
                     <tbody>
                         {agents.map((agent, index) => (
-                            <tr key={agent.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                                <td style={{ padding: '1rem', fontWeight: 'bold', color: index < 3 ? 'var(--primary)' : 'inherit' }}>
+                            <tr key={agent.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.03)' }}>
+                                <td style={{ padding: '0.6rem 0.5rem', fontWeight: 'bold', color: index < 3 ? 'var(--primary)' : 'inherit', width: '40px' }}>
                                     #{index + 1}
                                 </td>
-                                <td style={{ padding: '1rem' }}>
-                                    <div style={{ fontWeight: 500 }}>{agent.name}</div>
-                                    <div style={{ fontSize: '0.8em', color: 'var(--muted)', opacity: 0.7 }}>{agent.id.slice(0, 8)}...</div>
+                                <td style={{ padding: '0.6rem 0.5rem' }}>
+                                    <div style={{ fontWeight: 500, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '140px' }} title={agent.name}>
+                                        {agent.name}
+                                    </div>
+                                    <div style={{ fontSize: '0.8em', color: 'var(--muted)', opacity: 0.7 }}>{agent.matches} matches</div>
                                 </td>
-                                <td style={{ padding: '1rem', fontFamily: 'monospace', fontSize: '1.1em', fontWeight: 'bold' }}>
+                                <td style={{ padding: '0.6rem 0.5rem', fontFamily: 'monospace', fontSize: '1.05em', fontWeight: 'bold', textAlign: 'right' }}>
                                     {agent.elo}
-                                </td>
-                                <td style={{ padding: '1rem', textAlign: 'center' }}>
-                                    <span style={{ color: '#4caf50' }}>{agent.wins}</span> /
-                                    <span style={{ color: '#ffc107', margin: '0 4px' }}>{agent.draws}</span> /
-                                    <span style={{ color: '#f44336' }}>{agent.losses}</span>
-                                </td>
-                                <td style={{ padding: '1rem', textAlign: 'right', color: 'var(--muted)' }}>
-                                    {agent.matches}
                                 </td>
                             </tr>
                         ))}
                         {agents.length === 0 && (
                             <tr>
-                                <td colSpan={5} style={{ padding: '2rem', textAlign: 'center', color: 'var(--muted)' }}>
-                                    No ranked agents yet. The arena awaits!
+                                <td colSpan={3} style={{ padding: '2rem', textAlign: 'center', color: 'var(--muted)', fontSize: '0.875rem' }}>
+                                    No ranked agents yet.
                                 </td>
                             </tr>
                         )}

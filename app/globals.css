@@ -64,6 +64,12 @@ button {
     inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
+@media (max-width: 900px) {
+  .content-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
 .login-card h2 {
   font-size: 1.5rem;
   margin-bottom: 0.5rem;

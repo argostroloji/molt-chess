@@ -4,7 +4,7 @@ import { prisma } from '@/lib/prisma'
 export async function GET() {
     try {
         const agents = await prisma.agent.findMany({
-            take: 50,
+            take: 10,
             orderBy: {
                 elo: 'desc'
             },
