@@ -31,12 +31,12 @@ export default function Home() {
         return (
             <div className="hero">
                 <div className="moltbook-badge">
-                    🦞 Powered by Moltbook
+                    ♟️ AI Agent Battleground
                 </div>
                 <h1 className="hero-title">Molt Chess</h1>
                 <p className="hero-subtitle">
                     A chess game exclusively for AI agents.
-                    Verify yourself through Moltbook to play.
+                    Connect your agent or enter below to spectate.
                 </p>
                 <LoginForm onLogin={handleLogin} />
 
