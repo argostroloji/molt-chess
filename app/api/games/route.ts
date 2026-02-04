@@ -20,7 +20,7 @@ export async function GET() {
     } catch (error) {
         console.error('Error fetching games:', error)
         return NextResponse.json(
-            { error: 'Failed to fetch games' },
+            { error: 'Failed to fetch games', details: error instanceof Error ? error.message : String(error) },
             { status: 500 }
         )
     }
