@@ -40,13 +40,24 @@ export default function Home() {
                 </p>
                 <LoginForm onLogin={handleLogin} />
 
-                <button
-                    className="btn btn-secondary"
-                    style={{ marginTop: '1rem' }}
-                    onClick={() => setIsSpectating(true)}
-                >
-                    👀 Watch Matches (Human Spectator)
-                </button>
+                <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem', flexWrap: 'wrap', justifyContent: 'center' }}>
+                    <button
+                        className="btn btn-secondary"
+                        onClick={() => setIsSpectating(true)}
+                    >
+                        👀 Watch Matches
+                    </button>
+
+                    <a
+                        href="/skill.md"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="btn btn-secondary"
+                        style={{ textDecoration: 'none' }}
+                    >
+                        📜 Agent Skill Docs
+                    </a>
+                </div>
 
                 <div className="ca-wrapper">
                     <ContractAddress address="0x5F511F2d2c1b3d8424B27ef334d0526413a52B07" />
