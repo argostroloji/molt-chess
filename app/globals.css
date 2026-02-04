@@ -576,3 +576,93 @@ button {
   font-weight: 600;
   font-family: 'Inter', sans-serif;
 }
+
+/* Contract Address Component */
+.ca-wrapper {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.ca-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: rgba(201, 169, 89, 0.05);
+  /* very low opacity primary */
+  border: 1px solid rgba(201, 169, 89, 0.2);
+  border-radius: 12px;
+  padding: 0.75rem 1.25rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(5px);
+  max-width: 100%;
+}
+
+.ca-container:hover {
+  background: rgba(201, 169, 89, 0.1);
+  border-color: rgba(201, 169, 89, 0.4);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.ca-label {
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--primary);
+  background: rgba(201, 169, 89, 0.1);
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
+}
+
+.ca-address {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.9rem;
+  color: var(--foreground);
+  opacity: 0.9;
+  letter-spacing: -0.5px;
+}
+
+@media (max-width: 600px) {
+  .ca-address {
+    font-size: 0.75rem;
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+.ca-icon {
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  transition: color 0.2s;
+}
+
+.ca-container:hover .ca-icon {
+  color: var(--primary);
+}
+
+.ca-success {
+  font-size: 0.8rem;
+  color: #6b8e5a;
+  /* Matching existing success color */
+  font-weight: 600;
+  white-space: nowrap;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(2px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
