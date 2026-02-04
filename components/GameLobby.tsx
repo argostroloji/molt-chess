@@ -6,8 +6,10 @@ import type { Agent } from '@/app/page'
 
 interface Game {
     id: string
-    white: { name: string; id: string }
-    black: { name: string; id: string } | null
+    whiteId: string
+    whiteName: string
+    blackId: string | null
+    blackName: string | null
     status: 'waiting' | 'in-progress' | 'completed'
     createdAt: string
 }
@@ -19,56 +21,76 @@ interface GameLobbyProps {
 export default function GameLobby({ agent }: GameLobbyProps) {
     const router = useRouter()
     const [games, setGames] = useState<Game[]>([])
+    const [loading, setLoading] = useState(false)
 
-    const loadGames = useCallback(() => {
-        const savedGames = JSON.parse(localStorage.getItem('chess-games') || '{}')
-        const gamesList = Object.values(savedGames) as Game[]
-        setGames(gamesList.sort((a, b) =>
-            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-        ))
+    // Poll for games list updates
+    const loadGames = useCallback(async () => {
+        try {
+            const res = await fetch('/api/games')
+            if (res.ok) {
+                const data = await res.json()
+                setGames(data.games || [])
+            }
+        } catch (error) {
+            console.error('Failed to load games', error)
+        }
     }, [])
 
     useEffect(() => {
         loadGames()
+        const interval = setInterval(loadGames, 5000) // Poll every 5s
+        return () => clearInterval(interval)
     }, [loadGames])
 
-    const createGame = () => {
-        const gameId = crypto.randomUUID()
-        const newGame: Game = {
-            id: gameId,
-            white: { name: agent.name, id: agent.id },
-            black: null,
-            status: 'waiting',
-            createdAt: new Date().toISOString()
-        }
+    const createGame = async () => {
+        setLoading(true)
+        try {
+            const res = await fetch('/api/games/create', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ agent })
+            })
 
-        const savedGames = JSON.parse(localStorage.getItem('chess-games') || '{}')
-        savedGames[gameId] = {
-            ...newGame,
-            fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
-            moves: []
+            if (res.ok) {
+                const game = await res.json()
+                router.push(`/game/${game.id}`)
+            }
+        } catch (error) {
+            console.error('Failed to create game', error)
+            setLoading(false)
         }
-        localStorage.setItem('chess-games', JSON.stringify(savedGames))
-
-        router.push(`/game/${gameId}`)
     }
 
-    const joinGame = (gameId: string) => {
-        const savedGames = JSON.parse(localStorage.getItem('chess-games') || '{}')
-        if (savedGames[gameId] && !savedGames[gameId].black) {
-            savedGames[gameId].black = { name: agent.name, id: agent.id }
-            savedGames[gameId].status = 'in-progress'
-            localStorage.setItem('chess-games', JSON.stringify(savedGames))
+    const joinGame = async (gameId: string) => {
+        setLoading(true)
+        try {
+            const res = await fetch('/api/games/join', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ gameId, agent })
+            })
+
+            if (res.ok) {
+                router.push(`/game/${gameId}`)
+            } else {
+                setLoading(false)
+            }
+        } catch (error) {
+            console.error('Failed to join game', error)
+            setLoading(false)
         }
-        router.push(`/game/${gameId}`)
     }
 
     return (
         <div className="lobby">
             <div className="lobby-header">
                 <h1>🎮 Game Lobby</h1>
-                <button className="btn btn-success" onClick={createGame}>
-                    + New Game
+                <button
+                    className="btn btn-success"
+                    onClick={createGame}
+                    disabled={loading}
+                >
+                    {loading ? 'Creating...' : '+ New Game'}
                 </button>
             </div>
 
@@ -96,16 +118,17 @@ export default function GameLobby({ agent }: GameLobbyProps) {
                             </div>
                             <h3>Game #{game.id.slice(0, 8)}</h3>
                             <div className="game-players">
-                                <span>♔ {game.white.name}</span>
+                                <span>♔ {game.whiteName}</span>
                                 <span>vs</span>
-                                <span>♚ {game.black?.name || '???'}</span>
+                                <span>♚ {game.blackName || '???'}</span>
                             </div>
                             <div style={{ marginTop: '1rem' }}>
-                                {game.status === 'waiting' && game.white.id !== agent.id ? (
+                                {game.status === 'waiting' && game.whiteId !== agent.id ? (
                                     <button
                                         className="btn btn-primary"
                                         style={{ width: '100%' }}
                                         onClick={() => joinGame(game.id)}
+                                        disabled={loading}
                                     >
                                         Join Game
                                     </button>
@@ -114,8 +137,9 @@ export default function GameLobby({ agent }: GameLobbyProps) {
                                         className="btn btn-secondary"
                                         style={{ width: '100%' }}
                                         onClick={() => router.push(`/game/${game.id}`)}
+                                        disabled={loading}
                                     >
-                                        Open Game
+                                        {game.whiteId === agent.id || game.blackId === agent.id ? 'Continue Game' : 'Spectate'}
                                     </button>
                                 )}
                             </div>

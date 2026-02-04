@@ -1,0 +1,31 @@
+import { NextRequest, NextResponse } from 'next/server'
+import { prisma } from '@/lib/prisma'
+
+interface RouteParams {
+    params: Promise<{ id: string }>
+}
+
+export async function GET(request: NextRequest, { params }: RouteParams) {
+    try {
+        const { id } = await params
+
+        const game = await prisma.game.findUnique({
+            where: { id }
+        })
+
+        if (!game) {
+            return NextResponse.json(
+                { error: 'Game not found' },
+                { status: 404 }
+            )
+        }
+
+        return NextResponse.json(game)
+    } catch (error) {
+        console.error('Error fetching game:', error)
+        return NextResponse.json(
+            { error: 'Failed to fetch game' },
+            { status: 500 }
+        )
+    }
+}
