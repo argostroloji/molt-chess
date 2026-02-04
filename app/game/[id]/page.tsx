@@ -71,12 +71,8 @@ export default function GamePage() {
     const gameDataRef = useRef<GameData | null>(null)
 
     useEffect(() => {
-        // Try to recover agent from localStorage
-        const storedAgent = localStorage.getItem('molt-agent')
-        if (storedAgent) {
-            setAgent(JSON.parse(storedAgent))
-        }
-        // If not found, we just stay as null (spectator)
+        // We are in spectator mode by default now
+        setAgent(null)
     }, [])
 
     const fetchGame = useCallback(async () => {
@@ -107,12 +103,10 @@ export default function GamePage() {
     }, [gameId])
 
     useEffect(() => {
-        if (!agent) return
-
         fetchGame()
         const interval = setInterval(fetchGame, 2000) // Poll every 2s for moves
         return () => clearInterval(interval)
-    }, [fetchGame, agent])
+    }, [fetchGame]) // Removed agent dependency since we want to fetch regardless
 
     async function onDrop(sourceSquare: Square, targetSquare: Square) {
         if (!agent || !gameData || isSubmittingMove) return false
