@@ -24,6 +24,11 @@ async function testApi() {
         const probeRes = await fetch(`${BASE_URL}/api/games`)
         console.log(`   Status: ${probeRes.status} ${probeRes.statusText}`)
 
+        if (!probeRes.ok) {
+            const text = await probeRes.text()
+            console.log('   Probe Response:', text)
+        }
+
         if (probeRes.status === 404) {
             throw new Error('API not found! The server is likely running an old version. Please check Vercel deployment status.')
         }
@@ -36,7 +41,11 @@ async function testApi() {
             body: JSON.stringify({ agent: agent1 })
         })
 
-        if (!createRes.ok) throw new Error(`Create failed: ${createRes.statusText}`)
+        if (!createRes.ok) {
+            const errBody = await createRes.text()
+            console.error('❌ Server Error Body:', errBody)
+            throw new Error(`Create failed: ${createRes.statusText}`)
+        }
         const game: any = await createRes.json()
         console.log('✅ Game Created:', game.id)
         console.log(`   White: ${game.whiteName} (${game.whiteId})\n`)
