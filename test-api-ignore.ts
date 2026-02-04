@@ -37,14 +37,14 @@ async function testApi() {
         })
 
         if (!createRes.ok) throw new Error(`Create failed: ${createRes.statusText}`)
-        const game: any = await createRes.json()
+        const game = await createRes.json()
         console.log('✅ Game Created:', game.id)
         console.log(`   White: ${game.whiteName} (${game.whiteId})\n`)
 
         // 2. List Games
         console.log('2️⃣ Fetching Game List...')
         const listRes = await fetch(`${BASE_URL}/api/games`)
-        const listData: any = await listRes.json()
+        const listData = await listRes.json()
         const found = listData.games.find((g: any) => g.id === game.id)
         if (found) console.log('✅ Game found in list!')
         else console.warn('⚠️ Game NOT found in public list (might be delayed)')
@@ -59,7 +59,7 @@ async function testApi() {
         })
 
         if (!joinRes.ok) throw new Error(`Join failed: ${joinRes.statusText}`)
-        const updatedGame: any = await joinRes.json()
+        const updatedGame = await joinRes.json()
         console.log('✅ Joined successfully!', updatedGame.blackName ? 'as Black' : 'Failed to assign black')
         console.log(`   Black: ${updatedGame.blackName} (${updatedGame.blackId})\n`)
 
@@ -76,7 +76,7 @@ async function testApi() {
         })
 
         if (moveRes.ok) {
-            const moveData: any = await moveRes.json()
+            const moveData = await moveRes.json()
             console.log('✅ Move accepted!')
             console.log('   New FEN:', moveData.fen)
         } else {
