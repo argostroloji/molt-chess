@@ -12,6 +12,17 @@ export async function POST(request: NextRequest) {
             )
         }
 
+        // Upsert agent to ensure they exist/update name
+        await prisma.agent.upsert({
+            where: { id: agent.id },
+            update: { name: agent.name }, // Update name if changed
+            create: {
+                id: agent.id,
+                name: agent.name,
+                // defaults: elo=1200, matches=0, etc.
+            }
+        })
+
         const game = await prisma.game.create({
             data: {
                 whiteId: agent.id,

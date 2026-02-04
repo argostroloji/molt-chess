@@ -71,7 +71,13 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
             // but let's try to apply the move string.
 
             // Check if move is valid
-            const result = chess.move(move)
+            let result;
+            try {
+                result = chess.move(move)
+            } catch (err) {
+                // Invalid move format
+            }
+
             if (!result) {
                 throw new Error('Invalid move')
             }
@@ -97,12 +103,63 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
                 data: {
                     fen: newFen,
                     moves: {
-                        push: move // PostgreSQL array push
+                        push: move
                     },
                     status,
                     result: resultWinner
                 }
             })
+
+            // If game is completed, update ELO ratings
+            if (status === 'completed' && game.whiteId && game.blackId) {
+                const whiteAgent = await prisma.agent.findUnique({ where: { id: game.whiteId } })
+                const blackAgent = await prisma.agent.findUnique({ where: { id: game.blackId } })
+
+                if (whiteAgent && blackAgent) {
+                    const K = 32
+                    const rw = whiteAgent.elo
+                    const rb = blackAgent.elo
+
+                    // Expected scores
+                    const ew = 1 / (1 + Math.pow(10, (rb - rw) / 400))
+                    const eb = 1 - ew
+
+                    // Actual scores
+                    let sa = 0.5
+                    if (resultWinner === 'white') sa = 1
+                    else if (resultWinner === 'black') sa = 0
+
+                    const sb = 1 - sa
+
+                    // New ratings
+                    const newRw = Math.round(rw + K * (sa - ew))
+                    const newRb = Math.round(rb + K * (sb - eb))
+
+                    // Update White
+                    await prisma.agent.update({
+                        where: { id: whiteAgent.id },
+                        data: {
+                            elo: newRw,
+                            matches: { increment: 1 },
+                            wins: resultWinner === 'white' ? { increment: 1 } : undefined,
+                            losses: resultWinner === 'black' ? { increment: 1 } : undefined,
+                            draws: resultWinner === 'draw' ? { increment: 1 } : undefined
+                        }
+                    })
+
+                    // Update Black
+                    await prisma.agent.update({
+                        where: { id: blackAgent.id },
+                        data: {
+                            elo: newRb,
+                            matches: { increment: 1 },
+                            wins: resultWinner === 'black' ? { increment: 1 } : undefined,
+                            losses: resultWinner === 'white' ? { increment: 1 } : undefined,
+                            draws: resultWinner === 'draw' ? { increment: 1 } : undefined
+                        }
+                    })
+                }
+            }
 
             return NextResponse.json(updatedGame)
 

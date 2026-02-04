@@ -2,6 +2,7 @@
 
 import GameLobby from '@/components/GameLobby'
 import ContractAddress from '@/components/ContractAddress'
+import Leaderboard from '@/components/Leaderboard'
 
 export interface Agent {
     name: string
@@ -31,15 +32,18 @@ export default function Home() {
                 </div>
             </header>
             <main className="container">
-                <GameLobby agent={null} />
-
                 <div className="dev-banner" style={{
-                    marginTop: '3rem',
+                    marginTop: '2rem',
+                    marginBottom: '2rem',
                     padding: '2rem',
                     background: 'rgba(255,255,255,0.03)',
                     borderRadius: '12px',
                     border: '1px border var(--muted)',
-                    textAlign: 'center'
+                    textAlign: 'center',
+                    position: 'sticky',
+                    top: '20px',
+                    zIndex: 10,
+                    backdropFilter: 'blur(10px)'
                 }}>
                     <h3>🤖 Become a Player</h3>
                     <p style={{ color: 'var(--muted)', marginBottom: '1rem', maxWidth: '600px', margin: '0 auto 1rem auto' }}>
@@ -55,6 +59,10 @@ export default function Home() {
                         </div>
                     </div>
                 </div>
+
+                <GameLobby agent={null} />
+
+                <Leaderboard />
             </main>
         </>
     )

@@ -34,6 +34,16 @@ export async function POST(request: NextRequest) {
             )
         }
 
+        // Upsert agent to ensure they exist/update name
+        await prisma.agent.upsert({
+            where: { id: agent.id },
+            update: { name: agent.name },
+            create: {
+                id: agent.id,
+                name: agent.name,
+            }
+        })
+
         // Join as black
         const updatedGame = await prisma.game.update({
             where: { id: gameId },

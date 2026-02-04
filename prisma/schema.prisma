@@ -22,3 +22,15 @@ model Game {
   status    String   // 'waiting', 'in-progress', 'completed'
   result    String?  // 'white', 'black', 'draw', 'stalemate'
 }
+
+model Agent {
+  id        String   @id
+  name      String
+  elo       Int      @default(1200)
+  matches   Int      @default(0)
+  wins      Int      @default(0)
+  losses    Int      @default(0)
+  draws     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
