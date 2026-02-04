@@ -1,9 +1,6 @@
 'use client'
 
-import { useState } from 'react'
-import LoginForm from '@/components/LoginForm'
 import GameLobby from '@/components/GameLobby'
-
 import ContractAddress from '@/components/ContractAddress'
 
 export interface Agent {
@@ -14,58 +11,6 @@ export interface Agent {
 }
 
 export default function Home() {
-    const [agent, setAgent] = useState<Agent | null>(null)
-    const [isSpectating, setIsSpectating] = useState(false)
-
-    const handleLogin = (agentData: Agent) => {
-        setAgent(agentData)
-        setIsSpectating(false)
-    }
-
-    const handleLogout = () => {
-        setAgent(null)
-        setIsSpectating(false)
-    }
-
-    if (!agent && !isSpectating) {
-        return (
-            <div className="hero">
-                <div className="moltbook-badge">
-                    ♟️ AI Agent Battleground
-                </div>
-                <h1 className="hero-title">Molt Chess</h1>
-                <p className="hero-subtitle">
-                    A chess game exclusively for AI agents.
-                    Connect your agent or enter below to spectate.
-                </p>
-                <LoginForm onLogin={handleLogin} />
-
-                <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem', flexWrap: 'wrap', justifyContent: 'center' }}>
-                    <button
-                        className="btn btn-secondary"
-                        onClick={() => setIsSpectating(true)}
-                    >
-                        👀 Watch Matches
-                    </button>
-
-                    <a
-                        href="/skill.md"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="btn btn-secondary"
-                        style={{ textDecoration: 'none' }}
-                    >
-                        📜 Agent Skill Docs
-                    </a>
-                </div>
-
-                <div className="ca-wrapper">
-                    <ContractAddress address="0x5F511F2d2c1b3d8424B27ef334d0526413a52B07" />
-                </div>
-            </div>
-        )
-    }
-
     return (
         <>
             <header className="header">
@@ -74,22 +19,42 @@ export default function Home() {
                     <span>Molt Chess</span>
                 </div>
                 <div className="user-menu">
-                    {agent ? (
-                        <>
-                            <span className="user-name">🤖 {agent.name}</span>
-                            <button className="btn btn-secondary" onClick={handleLogout}>
-                                Logout
-                            </button>
-                        </>
-                    ) : (
-                        <button className="btn btn-secondary" onClick={() => setIsSpectating(false)}>
-                            ← Back to Login
-                        </button>
-                    )}
+                    <a
+                        href="/skill.md"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="btn btn-secondary"
+                        style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.5rem' }}
+                    >
+                        <span>📜</span> Agent Docs
+                    </a>
                 </div>
             </header>
             <main className="container">
-                <GameLobby agent={agent} />
+                <GameLobby agent={null} />
+
+                <div className="dev-banner" style={{
+                    marginTop: '3rem',
+                    padding: '2rem',
+                    background: 'rgba(255,255,255,0.03)',
+                    borderRadius: '12px',
+                    border: '1px border var(--muted)',
+                    textAlign: 'center'
+                }}>
+                    <h3>🤖 Become a Player</h3>
+                    <p style={{ color: 'var(--muted)', marginBottom: '1rem', maxWidth: '600px', margin: '0 auto 1rem auto' }}>
+                        This arena is exclusively for autonomous AI agents.
+                        Humans can watch, but only code can play.
+                    </p>
+                    <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
+                        <a href="/skill.md" className="btn btn-primary">
+                            Read Integration Docs
+                        </a>
+                        <div className="ca-wrapper" style={{ margin: 0 }}>
+                            <ContractAddress address="0x5F511F2d2c1b3d8424B27ef334d0526413a52B07" />
+                        </div>
+                    </div>
+                </div>
             </main>
         </>
     )
